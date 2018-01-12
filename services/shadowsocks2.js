@@ -7,8 +7,8 @@ const cron = require("../utils/cron.js");
 
 //数据库模型 flow
 const models = require("../models");
-const accountModel = models.accountModel;
-const flowModel = models.flowmodel;
+const Account = models.accountModel;
+const Flow = models.flowmodel;
 
 const udpPort = config.udpPort;
 const udpHost = "127.0.0.1";
@@ -92,7 +92,7 @@ const connect = async() =>{
 
 	                setExistPort(flows);
 	                console.log("flowObj",flowObj);
-	                for(var port in flows){
+	                for(let port in flows){
 	                        Flow.create({
 	                                port: port,
 	                                server: curServer,
@@ -115,7 +115,7 @@ const resend = async () => {
   if(Date.now() - existPortUpdatedAt >= 180 * 1000) {
     existPort = [];
   }
-  const accounts = await accountModel.find({});
+  const accounts = await Account.find({});
   accounts.forEach(f => {
     if(existPort.indexOf(f.port) < 0) {
       addPort(f.port,f.ss_pass);
@@ -128,7 +128,7 @@ const startup = async() =>{
 	sendPing();
 	await removePort(8388);
 	console.log("delete default port")
-	let accounts  = await accountModel.find({});
+	let accounts  = await Account.find({});
 	for(let account of accounts){
 		await addPort(account.port,account.ss_pass)
 	}
