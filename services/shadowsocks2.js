@@ -74,7 +74,7 @@ const addPort = (port,ss_pass) =>{
 	return sendMessage(`add: {"server_port": ${ port }, "password": "${ ss_pass }"}`)
 }
 
-const changePassword = (port,ss_pass) = >{
+const changePassword = (port,ss_pass) =>{
 	await removePort(port);
 	await addPort(port,ss_pass);
 	console.log(`change password for ${port},new password for shadow is ${ss_pass}`);
