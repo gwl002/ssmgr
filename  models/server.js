@@ -1,4 +1,4 @@
-var mongoose = require("mongoose");
+var mongoose = require("./db.js");
 var serverSchema = mongoose.Schema({
 	"ip":String,
 	"brand":String,

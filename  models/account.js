@@ -1,4 +1,4 @@
-var mongoose = require("mongoose");
+var mongoose = require("./db.js");
 var accountSchema = mongoose.Schema({
 	"user":String,
 	"port":Number,

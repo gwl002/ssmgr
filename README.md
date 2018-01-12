@@ -38,3 +38,7 @@ manager of ss server
 
 # shadowsocks 多端口配置
 link:https://github.com/shadowsocks/shadowsocks/wiki/Manage-Multiple-Users
+python版本开启命令： 
+```
+	sserver --manager-address 127.0.0.1:6001 -c tests/server-multi-passwd.json
+```

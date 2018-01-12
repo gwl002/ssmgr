@@ -1,0 +1,23 @@
+{
+  "name": "ssmgr",
+  "version": "1.0.0",
+  "description": "manager of ss server",
+  "main": "config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gwl002/ssmgr.git"
+  },
+  "author": "gwl002",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gwl002/ssmgr/issues"
+  },
+  "homepage": "https://github.com/gwl002/ssmgr#readme",
+  "dependencies": {
+    "later": "^1.2.0",
+    "mongoose": "^4.13.9"
+  }
+}
