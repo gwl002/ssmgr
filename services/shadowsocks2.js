@@ -126,11 +126,11 @@ const resend = async () => {
 const startup = async() =>{
 	console.log("start up ...")
 	sendPing();
-	await removePort(8388);
+	removePort(8388);
 	console.log("delete default port")
 	let accounts  = await Account.find({});
 	for(let account of accounts){
-		await addPort(account.port,account.ss_pass)
+		addPort(account.port,account.ss_pass)
 	}
 }
 
