@@ -67,7 +67,7 @@ const sendMessage = (message) =>{
 }
 
 const removePort = (port) =>{
-	retrn sendMessage(`remove: {"server_port": ${ port }}`);
+	return sendMessage(`remove: {"server_port": ${ port }}`);
 }
 
 const addPort = (port,ss_pass) =>{
