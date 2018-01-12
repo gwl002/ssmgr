@@ -8,7 +8,7 @@ const cron = require("../utils/cron.js");
 //数据库模型 flow
 const models = require("../models");
 const Account = models.accountModel;
-const Flow = models.flowmodel;
+const Flow = models.flowModel;
 
 const udpPort = config.udpPort;
 const udpHost = "127.0.0.1";
