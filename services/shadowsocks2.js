@@ -128,9 +128,9 @@ const startup = async() =>{
 	await removePort(8388);
 	console.log("delete default port")
 	let accounts  = await accountModel.find({});
-	accounts.forEach(account =>{
-		await addPort(account.port,account.ss_pass);
-	})
+	for(let account of accounts){
+		await addPort(account.port,account.ss_pass)
+	}
 }
 
 connect();
