@@ -6,8 +6,9 @@ const client = dgram.createSocket('udp4');
 const cron = require("../utils/cron.js");
 
 //数据库模型 flow
-const flowModel = require("../models/flow.js");
-const accountModel = require("../models/account.js");
+const models = require("../models");
+const accountModel = models.accountModel;
+const flowModel = models.flowmodel;
 
 const udpPort = config.udpPort;
 const udpHost = "127.0.0.1";
