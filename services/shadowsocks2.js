@@ -119,7 +119,7 @@ const resend = async () => {
   	const accounts = await Account.find({});
   	accounts.forEach(f => {
   	  if(existPort.indexOf(f.port) < 0) {
-  	    await addPort(f.port,f.ss_pass);
+  	    addPort(f.port,f.ss_pass);
   	  }
   	});
   }catch(err){
@@ -136,7 +136,7 @@ const startup = async() =>{
 		let accounts  = await Account.find({});
 		console.log("accounts in db",accounts);
 		for(let account of accounts){
-			await addPort(account.port,account.ss_pass)
+			addPort(account.port,account.ss_pass)
 		}
 	}catch(err){
 		console.log(err);
