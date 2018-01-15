@@ -115,12 +115,16 @@ const resend = async () => {
   if(Date.now() - existPortUpdatedAt >= 180 * 1000) {
     existPort = [];
   }
-  const accounts = await Account.find({});
-  accounts.forEach(f => {
-    if(existPort.indexOf(f.port) < 0) {
-      addPort(f.port,f.ss_pass);
-    }
-  });
+  try{
+  	const accounts = await Account.find({});
+  	accounts.forEach(f => {
+  	  if(existPort.indexOf(f.port) < 0) {
+  	    addPort(f.port,f.ss_pass);
+  	  }
+  	});
+  }catch(err){
+  	console.log(err);
+  }
 };
 
 const startup = async() =>{
