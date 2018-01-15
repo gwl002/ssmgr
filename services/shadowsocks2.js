@@ -119,7 +119,7 @@ const resend = async () => {
   	const accounts = await Account.find({});
   	accounts.forEach(f => {
   	  if(existPort.indexOf(f.port) < 0) {
-  	    addPort(f.port,f.ss_pass);
+  	    await addPort(f.port,f.ss_pass);
   	  }
   	});
   }catch(err){
@@ -131,11 +131,15 @@ const startup = async() =>{
 	console.log("start up ...")
 	sendPing();
 	removePort(8388);
-	console.log("delete default port")
-	let accounts  = await Account.find({});
-	console.log("accounts in db");
-	for(let account of accounts){
-		addPort(account.port,account.ss_pass)
+	console.log("delete default port");
+	try{
+		let accounts  = await Account.find({});
+		console.log("accounts in db",accounts);
+		for(let account of accounts){
+			await addPort(account.port,account.ss_pass)
+		}
+	}catch(err){
+		console.log(err);
 	}
 }
 
