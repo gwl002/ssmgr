@@ -133,7 +133,7 @@ const startup = async() =>{
 	removePort(8388);
 	console.log("delete default port");
 	try{
-		let accounts  = await Account.find({}).populate("port").populate("ss_pass");
+		let accounts  = await Account.find({});
 		console.log("accounts in db",accounts);
 		for(let account of accounts){
 			addPort(account.port,account.ss_pass)
