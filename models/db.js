@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const dbURL = require("../config.js").db;
 
 
-mongoose.connect(dbURL,function(){
+mongoose.connect(dbURL,{useMongoClient:true},function(){
 	console.log("connect mongodb successfully!")
 })
 

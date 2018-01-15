@@ -63,7 +63,7 @@ const sendPing = () =>{
 }
 
 const sendMessage = (message) =>{
-	client.send(message, port, host);
+	client.send(message, udpPort, udpHost);
 	return Promise.resolve('ok');
 }
 
