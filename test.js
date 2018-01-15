@@ -1,4 +1,11 @@
-var ss = ["x","y","z"]
-for(let s of ss){
-	console.log(s)
+var models =require("./models");
+
+var account = models.accountModel;
+
+
+var accountPrint = async()=>{
+	accounts = await account.find({});
+	console.log(accounts);
 }
+
+accountPrint();

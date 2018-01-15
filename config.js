@@ -3,7 +3,7 @@ module.exports={
 		host:"128.199.241.60",
 		port:"8080"
 	},
-	db:"mongodb://45.32.117.8:27017/ss",
+	db:"mongodb://128.199.241.60:27017/ss",
 	udpPort:"5000",
 	tcpPort:"6000",
 	tcpServers:[
