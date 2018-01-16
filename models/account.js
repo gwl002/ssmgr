@@ -4,7 +4,11 @@ var accountSchema = mongoose.Schema({
 	"port":Number,
 	"passwd":String,
 	"email":String,
-	"ss_pass":String
+	"ss_pass":String,
+	"status":{
+		type: Number,
+		default: 1
+	}
 });
 
 var accountModel = mongoose.model("Account",accountSchema);
