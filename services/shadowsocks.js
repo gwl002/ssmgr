@@ -1,60 +1,159 @@
-var dgram = require("dgram");
-var mongoose = require("mongoose");
-var config = require("../config.js");
+const dgram = require("dgram");
+const config = require("../config.js");
+const exec = require("child_process").exec;
 
-var dbURL = config.db;
-var curServer = config.curServer;
+const client = dgram.createSocket('udp4');
+const cron = require("../utils/cron.js");
 
-var message = new Buffer("ping");
-var socket = dgram.createSocket("udp4");
-var flowSchema = mongoose.Schema({
-        "port":String,
-        "server":String,
-        "flow":Number,
-        "time":{type: Date, default: Date.now}
-})
-var Flow = mongoose.model("Flow",flowSchema);
+//数据库模型 flow
+const models = require("../models");
+const Account = models.accountModel;
+const Flow = models.flowModel;
 
-mongoose.connect(dbURL,{useMongoClient:true},function(){
-        console.log("connect to db successfully...");
-})
+const udpPort = config.udpPort;
+const udpHost = "127.0.0.1";
 
-
-socket.on("message",function(msg,rinfo){
-        console.log(`recv msg from ${rinfo.address}`);
-        var msg = `${msg}`;
-        if(msg.startsWith('stat:')){
-                var flowObj = msg.substr(6);
-                var flows = JSON.parse(flowObj);
-                console.log("flowObj",flowObj);
-                for(var port in flows){
-                        Flow.create({
-                                port: port,
-                                server: curServer,
-                                flow: flows[port]
-                        })
-                }
-        }
-})
-
-socket.send(message,0,message.length,8390,"localhost",function(err,bytes){
-        console.log(bytes.toString())
-})
-
-
-const getIp = port => {
-  const cmd = `netstat -ntu | grep ":${ port } " | grep ESTABLISHED | awk '{print $5}' | cut -d: -f1 | grep -v 127.0.0.1 | uniq -d`;
-  return new Promise((resolve, reject) => {
-    exec(cmd, function(err, stdout, stderr){
-      if(err) {
-        reject(stderr);
-      } else {
-        const result = [];
-        stdout.split('\n').filter(f => f).forEach(f => {
-          if(result.indexOf(f) < 0) { result.push(f); }
-        });
-        resolve(result);
-      }
-    });
-  });
+let existPort = [];
+let existPortUpdatedAt = Date.now();
+const setExistPort = flow => {
+  existPort = [];
+  for(const f in flow) {
+    existPort.push(+f);
+  }
+  existPortUpdatedAt = Date.now();
 };
+
+const getServerIp = () =>{
+	let cmd = `netstat -ntu | grep ESTABLISHED | awk '{print $4}' | cut -d: -f1| grep -v 127.0.0.1 | uniq -d`
+	return new Promise((resolve,reject) =>{
+		exec(cmd,function(err,stdout,stderr){
+			if(err){
+				reject(stderr)
+			}else{
+				let result = [];
+				stdout.split('\n').filter(f => f).forEach(f => {
+				  if(result.indexOf(f) < 0) { result.push(f); }
+				});
+				resolve(result);
+			}
+		})
+	})
+}
+
+const getClientIp = port => {
+	let cmd = `netstat -ntu | grep ":${ port } " | grep ESTABLISHED | awk '{print $5}' | cut -d: -f1| grep -v 127.0.0.1 | uniq -d`
+	return new Promise((resolve,reject)=> {
+		exec(cmd,function(err,stdout,stderr){
+			if(err){
+				reject(stderr)
+			}else{
+				let result = [];
+				stdout.split('\n').filter(f => f).forEach(f => {
+				  if(result.indexOf(f) < 0) { result.push(f); }
+				});
+				resolve(result);
+			}
+		})
+	})
+}
+
+const sendPing = () =>{
+	client.send(new Buffer('ping'), udpPort, udpHost);
+	return Promise.resolve('ok');
+}
+
+const sendMessage = (message) =>{
+	client.send(message, udpPort, udpHost);
+	return Promise.resolve('ok');
+}
+
+const removePort = (port) =>{
+	return sendMessage(`remove: {"server_port": ${ port }}`);
+}
+
+const addPort = (port,ss_pass) =>{
+	return sendMessage(`add: {"server_port": ${ port }, "password": "${ ss_pass }"}`)
+}
+
+const changePassword = async(port,ss_pass) =>{
+	await removePort(port);
+	await addPort(port,ss_pass);
+	console.log(`change password for ${port},new password for shadow is ${ss_pass}`);
+}
+
+const connect = async() =>{
+	let curServer = await getServerIp()[0];
+	client.on("message",function(msg,rinfo){
+	        console.log(`recv msg from ${rinfo.address}`);
+	        var msg = `${msg}`;
+	        if(msg.startsWith('stat:')){
+	                var flowObj = msg.substr(6);
+	                var flows = JSON.parse(flowObj);
+
+	                setExistPort(flows);
+	                console.log("flowObj",flowObj);
+	                for(let port in flows){
+	                        Flow.create({
+	                                port: port,
+	                                server: curServer,
+	                                flow: flows[port]
+	                        })
+	                }
+	        }
+	})
+
+	client.on("error",function(err){
+		console.log("client error:",error)
+	})
+
+	client.on("close",function(err){
+		console.log("client closed")
+	})
+}
+
+const resend = async () => {
+  if(Date.now() - existPortUpdatedAt >= 180 * 1000) {
+    existPort = [];
+  }
+  try{
+  	const accounts = await Account.find({});
+  	accounts.forEach(f => {
+  	  if(existPort.indexOf(f.port) < 0) {
+  	    addPort(f.port,f.ss_pass);
+  	  }
+  	});
+  }catch(err){
+  	console.log(err);
+  }
+};
+
+const startup = async() =>{
+	console.log("start up ...")
+	sendPing();
+	removePort(8388);
+	console.log("delete default port");
+	try{
+		let accounts  = await Account.find({});
+		console.log("accounts in db",accounts);
+		for(let account of accounts){
+			addPort(account.port,account.ss_pass)
+		}
+	}catch(err){
+		console.log(err);
+	}
+}
+
+connect();
+startup();
+cron.minute(() => {
+  resend();
+  sendPing();
+}, 1);
+
+module.exports={
+	getClientIp,
+	getServerIp,
+	removePort,
+	addPort,
+	changePassword
+}

@@ -10,6 +10,5 @@ module.exports={
 		"128.199.241.60",
 		"172.93.47.21"
 	],
-	curServer:"172.93.47.21"
-	
+	packPassword:"secret2354"	
 }

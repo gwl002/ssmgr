@@ -42,3 +42,9 @@ python版本开启命令：
 ```
 	sserver --manager-address 127.0.0.1:6001 -c tests/server-multi-passwd.json
 ```
+
+# sshd配置
+	service sshd restart 重启
+	/etc/ssh/sshd_config 更改配置文件
+	复制公钥到~/.ssh/authorized_keys
+
