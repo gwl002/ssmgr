@@ -25,18 +25,20 @@ const checkCode = (data,password,code) =>{
 const handleCommand = async(data,code) =>{
 	try{
 		let command = JSON.parse(data.slice(6).toString());
+		let port;
+		let ss_pass;
 		console.log("------ receive command:",message);
 		switch(command.type){
 			case "add":
-				let port = +command.port;
-				let ss_pass = command.ss_pass;
+				port = +command.port;
+				ss_pass = command.ss_pass;
 				return shadowsocks.addPort(port,ss_pass);
 			case "remove":
-				let port = +command.port;
+				port = +command.port;
 				return shadowsocks.removePort(port);
 			case "pwd":
-				let port = +command.port;
-				let ss_pass = command.ss_pass;
+				port = +command.port;
+				ss_pass = command.ss_pass;
 				return shadowsocks.changePassword(port,ss_pass);
 			default:
 				return Promise.reject();
@@ -104,8 +106,8 @@ const server = net.createServer(socket =>{
 })
 
 server.listen({
-  tcpPort,
+  port:tcpPort,
   host,
 }, () => {
-  logger.info(`server listen on ${ host }:${ tcpPort }`);
+  console.log(`server listen on ${ host }:${ tcpPort }`);
 });
