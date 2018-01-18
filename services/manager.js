@@ -56,12 +56,12 @@ const sendMessage = (data,host,port) =>{
 
 		client.on('data', data=>{
 			receiveData(receive,data).then(message =>{
+				console.log("manager receive mesage:",message);
 				if(!message){
 
 				}else if(message.code == 0){
 					resolve(message.data);
 				}else{
-					console.log(message);
 					reject();
 				}
 				client.end();

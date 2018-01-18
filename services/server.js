@@ -27,7 +27,7 @@ const handleCommand = async(data,code) =>{
 		let command = JSON.parse(data.slice(6).toString());
 		let port;
 		let ss_pass;
-		console.log("------ receive command:",message);
+		console.log("------ receive command:",command);
 		switch(command.type){
 			case "add":
 				port = +command.port;

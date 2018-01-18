@@ -63,6 +63,7 @@ const sendPing = () =>{
 }
 
 const sendMessage = (message) =>{
+	console.log("shadowsocks receive command:",message)
 	client.send(message, udpPort, udpHost);
 	return Promise.resolve('ok');
 }
