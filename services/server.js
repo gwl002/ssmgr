@@ -8,7 +8,7 @@ const packPassword = config.packPassword;
 const host = "0.0.0.0";
 
 const handleReceive = (receive,data) =>{
-	receive.data = Buffer.concat(receive.data,data);
+	receive.data = Buffer.concat([receive.data,data]);
 	checkData(receive);
 }
 
@@ -18,7 +18,7 @@ const checkCode = (data,password,code) =>{
 		return false;
 	}
 	let command = data.slice(6).toString();
-	let md5 = crypto.creatHash("md5").update(time + command + password).digest('hex');
+	let md5 = crypto.createHash("md5").update(time + command + password).digest('hex');
 	return md5.substr(0,8) == code.toString('hex');
 }
 

@@ -1,5 +1,5 @@
 const net = require("net");
-const config = require("./config.js");
+const config = require("../config.js");
 const crypto = require('crypto');
 
 const tcpPort = config.tcpPort;
