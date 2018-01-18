@@ -50,7 +50,7 @@ const sendMessage = (data,host,port) =>{
 
 		client.setTimeout(10*1000); //10秒超时
 		let receive = {
-			data: Buffer.from("");
+			data: Buffer.from(""),
 			socket: client
 		};
 
@@ -65,10 +65,10 @@ const sendMessage = (data,host,port) =>{
 					reject();
 				}
 				client.end();
-			}).catch(err){
+			}).catch( err =>{
 				console.log(err);
 				client.end();
-			}
+			})
 		});
 
 		client.on("close",()=>{
