@@ -1,11 +1,9 @@
-var models =require("./models");
-
-var account = models.accountModel;
+var sendMessage = require("./services/manager.js").send;
 
 
-var accountPrint = async()=>{
-	accounts = await account.find({});
-	console.log(accounts);
-}
 
-accountPrint();
+sendMessage({
+	type: "add",
+	port: 3966,
+	ss_pass: "123456"
+},"128.199.241.60",6000)
