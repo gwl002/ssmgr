@@ -41,7 +41,7 @@ const handleCommand = async(data,code) =>{
 				ss_pass = command.ss_pass;
 				return shadowsocks.changePassword(port,ss_pass);
 			default:
-				return Promise.reject();
+				return Promise.reject("unknown command");
 		}
 
 	}catch(err){
@@ -64,6 +64,7 @@ const checkData = (receive) =>{
 	let data;
 	let code;
 	if(buffer.length <2){
+		receive.socket.end();
 		return;
 	}
 	length = buffer[0]*256 + buffer[1];

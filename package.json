@@ -17,6 +17,10 @@
   },
   "homepage": "https://github.com/gwl002/ssmgr#readme",
   "dependencies": {
+    "koa": "^2.4.1",
+    "koa-bodyparser": "^4.2.0",
+    "koa-router": "^7.3.0",
+    "koa-static": "^4.0.2",
     "later": "^1.2.0",
     "mongoose": "^4.13.9"
   }

@@ -11,4 +11,4 @@ module.exports={
 		"172.93.47.21"
 	],
 	packPassword:"secret2354"	
-}
+} 
