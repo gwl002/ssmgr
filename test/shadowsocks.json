@@ -1,0 +1,9 @@
+{
+    "server": "0.0.0.0",
+    "port_password": {
+        "8388": "nopasswd123",
+        "8389":"passwd123"
+    },
+    "timeout": 300,
+    "method": "aes-256-cfb"
+}

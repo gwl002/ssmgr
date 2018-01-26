@@ -1,5 +1,6 @@
 <template>
   <el-row>
+    {{msg}}
   </el-row>
 </template>
 

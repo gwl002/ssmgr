@@ -19,7 +19,11 @@ manager of ss server
 	)
 ```
 4. vi /etc/mongod.conf 
-	auth=true 开启db验证
+	2.6一下
+		auth=true 开启db验证
+
+	3.2 
+		authorization: enabled
 5. systemctl restart mongod
 6. mongo --port 28018 -u "admin" -p "admin123" --authenticationDatabase "admin" 
 ```
